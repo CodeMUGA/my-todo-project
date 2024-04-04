@@ -1,13 +1,10 @@
-
-
 <template>
   <header>
-
     <div class="wrapper">
-
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/signin">Sign In</RouterLink>
       </nav>
     </div>
   </header>
@@ -20,7 +17,6 @@ header {
   line-height: 1.5;
   max-height: 100vh;
 }
-
 
 nav {
   width: 100%;
@@ -53,8 +49,6 @@ nav a:first-of-type {
     place-items: center;
     padding-right: calc(var(--section-gap) / 2);
   }
-
-
 
   header .wrapper {
     display: flex;

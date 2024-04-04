@@ -1,30 +1,40 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { fetchActualUser } from '@/api/userApi'
+import { fetchActualUser, createNewUser, logIn } from '@/api/userApi'
 
 export const useUserStore = defineStore('user', () => {
   //state
-  const user = ref(null)
+  const user = ref(undefined)
 
   //actions
-  function fetchUser() {
+  async function fetchUser() {
     try {
-      user.value = fetchActualUser()
+      user.value = await fetchActualUser()
     } catch (error) {
       console.error(error)
     }
   }
 
   async function signUp(email, password) {
-    
-    const { data, error } = await supabase.auth.signUp({
-    email: 'example@email.com',
-    password: 'example-password',
-  })
+    try {
+      user.value = await createNewUser(email, password)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async function signIn(email, password) {
+    try {
+      user.value = await logIn(email, password)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return {
     user,
-    fetchUser
+    fetchUser,
+    signUp,
+    signIn
   }
 })
