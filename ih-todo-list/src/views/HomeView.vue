@@ -18,7 +18,7 @@ const addTask = () => {
     <form @submit.prevent="addTask">
       <h4>¿Que tienes por hacer?</h4>
       <input type="text" placeholder="ej. Comprar leche" v-model="add_task" />
-      <input type="submit" value=" + " />
+      <input type="submit" value=" submit " />
     </form>
   </div>
 </template>
