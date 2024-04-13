@@ -13,6 +13,7 @@ const addTask = () => {
 </script>
 
 <template>
+  <section>  
   <div class="home">
     <h1>Home View!</h1>
     <form @submit.prevent="addTask">
@@ -21,6 +22,13 @@ const addTask = () => {
       <input type="submit" value=" submit " />
     </form>
   </div>
+  </section>
+
+  <section class="todo-list">
+    <h2>Lista de tareas</h2>
+      <div class="todo-item">
+  </section>
+
 </template>
 
 <style scoped></style>
