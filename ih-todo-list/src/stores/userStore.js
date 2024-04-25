@@ -15,7 +15,7 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  async function signUp(email, password) {
+  async function register(email, password) {
     try {
       user.value = await createNewUser(email, password)
     } catch (error) {
@@ -31,10 +31,18 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  // async function SingOut() {
+  //   try {
+  //     user.value = null
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+  // }
+
   return {
     user,
     fetchUser,
-    signUp,
+    register,
     signIn
   }
 })
