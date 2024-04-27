@@ -1,23 +1,21 @@
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import { useTasksStore } from '@/stores/taskStore'
+import { storeToRefs } from 'pinia';
 
-const task = ref([])
+const tasksStore = useTasksStore()
+const { tasks, orderedTasks } = storeToRefs(tasksStore)
+
 const name = ref('')
 
 const input_content = ref('')
-
-const task_asc = computed(() =>
-  task.value.sort((a, b) => {
-    return a.createdAt - b.createdAt
-  })
-)
 
 watch(name, (newVal) => {
   localStorage.setItem('name', newVal)
 })
 
 watch(
-  task,
+  tasks,
   (newVal) => {
     localStorage.setItem('todos', JSON.stringify(newVal))
   },
@@ -30,23 +28,24 @@ const addTask = () => {
   if (input_content.value.trim() === '') {
     return
   }
-
+/*
   task.value.push({
     content: input_content.value,
     done: false,
     editable: false,
     createdAt: new Date().getTime()
-  })
+  })*/
 }
 
-const removeTodo = (todo) => {
-  task.value = task.value.filter((t) => t !== todo)
+const removeTodo = async (todoId) => {
+  await tasksStore.removeTask(todoId)
+  // task.value = task.value.filter((t) => t !== todo)
 }
 
 //change to database
-onMounted(() => {
+onMounted(async () => {
   name.value = localStorage.getItem('name') || ''
-  task.value = JSON.parse(localStorage.getItem('todos')) || []
+  await tasksStore.fetchAllTasks()
 })
 </script>
 
@@ -84,10 +83,10 @@ onMounted(() => {
     <section class="todo-list mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <h3 class="mt-10 text-1xl font-bold leading-9 tracking-tight text-gray-700">TODO LIST</h3>
       <div class="list" id="todo-list flex">
-        <div v-for="todo in task_asc" :key="todo" class="flex">
+        <div v-for="todo in orderedTasks" :key="todo.id" class="flex">
           <div class="flex">
             <label class="flex-none justify-items-center rounded-lg pm-2 py-1">
-              <input type="checkbox" v-model="todo.done" class="" />
+              <input type="checkbox" v-model="todo.is_complete" class="" />
             </label>
           </div>
 
@@ -95,15 +94,15 @@ onMounted(() => {
             <input
               class="flex w-full rounded-md border-0 mx-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
               type="text"
-              v-model="todo.content"
-              :class="`todo-item ${todo.done && 'text-done'}`"
+              v-model="todo.title"
+              :class="`todo-item ${todo.is_complete && 'text-done'}`"
             />
           </div>
 
           <div class="actions flex">
             <button
               class="delete lex justify-center rounded-md bg-indigo-600 px-3 py-1 text-sm font-semilbold leading-6 text-white shadow-sm hover:bf-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              @click="removeTodo(todo)"
+              @click="removeTodo(todo.id)"
             >
               x
             </button>

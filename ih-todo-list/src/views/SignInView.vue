@@ -1,15 +1,18 @@
 <script setup>
 import { ref } from 'vue'
 import { useUserStore } from '@/stores/userStore'
+import { useRouter } from 'vue-router';
 
 const userStore = useUserStore()
+const router = useRouter()
 
 const user = ref('')
 const password = ref('')
 
-const signIn = () => {
+const signIn = async () => {
   console.log('User is:', user.value)
-  userStore.signUp(user.value, password.value)
+  await userStore.signIn(user.value, password.value)
+  router.push('/')
 }
 </script>
 
@@ -17,8 +20,8 @@ const signIn = () => {
   <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <img src="#" alt="" class="mx-auto h-10 w-auto" />
-      <H2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
-        >Sign in to your account</H2
+      <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
+        >Sign in to your account</h2
       >
     </div>
 
@@ -67,7 +70,8 @@ const signIn = () => {
 
         <div>
           <button
-            @click="signIn"
+            @click.prevent.stop="signIn"
+            type="button"
             class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semilbold leading-6 text-white shadow-sm hover:bf-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             Sign in
@@ -75,11 +79,6 @@ const signIn = () => {
         </div>
       </form>
 
-      <!-- <p class="mt-10 text-center text-sm text-gray-500">
-        Don't have an account?
-        {{ '' }}
-        <a href="" class="font-semibold text-indigo-600 hover:text-indigo-500">Sign up</a>
-      </p> -->
     </div>
   </div>
 </template>

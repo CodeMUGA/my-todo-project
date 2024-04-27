@@ -1,26 +1,17 @@
 <script setup>
-import { supabase } from '@/api/supabase'
 import { useUserStore } from '@/stores/userStore'
 import { ref } from 'vue'
 
 const userStore = useUserStore()
 
-let email = ref('')
-let password = ref('')
+const user = ref('')
+const password = ref('')
 
 //create acc
 
-async function createAccount() {
-  console.log(email.value, password.value)
-  const { data, error } = await supabase.auth.signUp({
-    email: email.value,
-    password: password.value
-  })
-  if (error) {
-    console.log(error)
-  } else {
-    console.log(data)
-  }
+const createAccount = () => {
+  console.log('User is:', user.value)
+  userStore.logIn(user.value, password.value)
 }
 </script>
 
@@ -28,24 +19,24 @@ async function createAccount() {
   <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <img src="#" alt="" class="mx-auto h-10 w-auto" />
-      <H2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
-        >Register a new Account</H2
+      <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
+        >Register a new Account</h2
       >
     </div>
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <form class="space-y-6">
         <div>
-          <label for="email" class="block text-sm font-medium leading-6 text-gray-900"
+          <label for="user" class="block text-sm font-medium leading-6 text-gray-900"
             >Email:</label
           >
           <div class="mt-2">
             <input
               id="email"
-              name="email"
+              name="user"
               type="email"
               autocomplete="email"
-              v-model="email"
+              v-model="user"
               required
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />

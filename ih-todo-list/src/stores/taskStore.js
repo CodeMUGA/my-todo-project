@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { fetchAllTasks } from '@/api/taskApi'
 
@@ -6,10 +6,14 @@ export const useTasksStore = defineStore('tasks', () => {
   //state
   const tasks = ref([])
 
+  const orderedTasks = computed(() => {
+    return tasks.value.sort((a, b) => a.is_complete - b.is_complete)
+  })
+
   //actions
-  function fetchTasks() {
+  async function fetchTasks() {
     try {
-      tasks.value = fetchAllTasks()
+      tasks.value = await fetchAllTasks()
     } catch (error) {
       console.error(error)
     }
@@ -17,6 +21,7 @@ export const useTasksStore = defineStore('tasks', () => {
 
   return {
     tasks,
+    orderedTasks,
     fetchTasks
   }
 })
