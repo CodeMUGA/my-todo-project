@@ -1,4 +1,27 @@
-// pasar a componente
+
+<script setup>
+  import { supabase } from '../utils/supabase'
+  import { ref, onMounted } from 'vue'
+  const todos = ref([])
+
+  async function getTodos() {
+    const { data: todos } = await supabase.from('todos').select()
+    tasks.value = todos
+  }
+
+  onMounted(() => {
+    getTodos()
+  })
+
+</script>
+
+<template>
+  <ul>
+    <li v-for="todo in todos" :key="todo.id">{{ todo.name }}</li>
+  </ul>
+</template>
+
+
 <template>
   <header>
     <div class="wrapper">
